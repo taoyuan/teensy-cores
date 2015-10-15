@@ -942,7 +942,7 @@ void usb_isr(void)
 
 
 
-void usb_init(void)
+void usb_open(void)
 {
 	int i;
 
@@ -997,9 +997,22 @@ void usb_init(void)
 	USB0_CONTROL = USB_CONTROL_DPPULLUPNONOTG;
 }
 
+void usb_close(void) {
+	// disable d+ pullup
+	USB0_CONTROL = 0;
+	// disable interrupt in NVIC...
+	NVIC_DISABLE_IRQ(IRQ_USBOTG);
 
-#else // F_CPU < 20 MHz && defined(NUM_ENDPOINTS)
+	// disable USB
+	USB0_CTL = 0;
 
+	// clear all ISR flags
+	USB0_ISTAT = 0xFF;
+	USB0_ERRSTAT = 0xFF;
+	USB0_OTGISTAT = 0xFF;
+}
+
+// using usb_open replace
 void usb_init(void)
 {
 }

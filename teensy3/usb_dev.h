@@ -47,6 +47,8 @@
 extern "C" {
 #endif
 
+void usb_open(void);
+void usb_close(void);
 void usb_init(void);
 void usb_init_serialnumber(void);
 void usb_isr(void);
